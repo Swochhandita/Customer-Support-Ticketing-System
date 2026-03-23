@@ -93,4 +93,10 @@ spring.datasource.password=your_password
   mvn clean install
 mvn spring-boot:run
 Application will start at http://localhost:8080
+📄 License
+This is a learning project for educational purposes.
+
+👤 Author
+Your Name - Swochhandita
+
 

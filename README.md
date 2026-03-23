@@ -83,16 +83,17 @@ customer-support-ticketing-system/
 git clone https://github.com/Swochhandita/customer-support-ticketing-system.git
 cd customer-support-ticketing-system
 2. **Create MySQL database**
-  mysql -u root -p
+mysql -u root -p
 CREATE DATABASE ticket_system;
 EXIT;
 3. **Update configuration Edit src/main/resources/application.properties:**
-  spring.datasource.username=root
+spring.datasource.username=root
 spring.datasource.password=your_password
 4. **Build and run**
-  mvn clean install
+mvn clean install
 mvn spring-boot:run
 Application will start at http://localhost:8080
+
 📄 License
 This is a learning project for educational purposes.
 

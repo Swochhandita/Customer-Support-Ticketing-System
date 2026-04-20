@@ -11,5 +11,5 @@ package com.ticketing.system.entity;
 public enum RoleType {
     ADMIN,
     USER,
-    Agent
+    AGENT
 }

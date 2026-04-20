@@ -20,7 +20,7 @@ public class TicketResponse {
     private long id;
     private String title;
     private String description;
-    private String Status;
+    private String status;
     private String priority;
     private UserResponse user;//Customer who created the ticket
     private UserResponse assignedAgent;//Support agent assigned to the ticket

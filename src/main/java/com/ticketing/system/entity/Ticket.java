@@ -68,6 +68,4 @@ public class Ticket {
         updatedAt = LocalDateTime.now();
     }
 
-
-
 }

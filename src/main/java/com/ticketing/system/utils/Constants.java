@@ -12,7 +12,7 @@ public class Constants {
     public static final String JWT_PREFIX = "Bearer ";
 
     // Role Constants
-    public static final String ROLE_CUSTOMER = "CUSTOMER";
+    public static final String ROLE_CUSTOMER = "USER";
     public static final String ROLE_AGENT = "AGENT";
     public static final String ROLE_ADMIN = "ADMIN";
 
@@ -32,6 +32,6 @@ public class Constants {
     public static final String BAD_REQUEST = "Invalid request";
 
     // Pagination Constants
-    public static final int DEFAULT_PAGE_SIZE = 20;
-    public static final int MAX_PAGE_SIZE = 100;
+    public static final int DEFAULT_PAGE_SIZE = 10;
+    public static final int MAX_PAGE_SIZE = 10;
 }

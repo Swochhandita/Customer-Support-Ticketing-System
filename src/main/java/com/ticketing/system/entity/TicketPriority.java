@@ -4,6 +4,4 @@ public enum TicketPriority {
     HIGH,
     MEDIUM,
     LOW
-
-
 }

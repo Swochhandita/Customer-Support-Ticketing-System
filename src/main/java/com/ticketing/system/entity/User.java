@@ -1,9 +1,12 @@
-package com.ticketing.system.entity;
+import com.ticketing.system.entity.Comment;
+import com.ticketing.system.entity.Role;
+import com.ticketing.system.entity.Ticket;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class User {
     private Long id;
     @Column(nullable = false, unique = true, length = 50)
     private String username;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 255)
     private String password;
     @Column(nullable = false, unique = true, length = 50)
     private String email;
@@ -38,7 +41,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
     @OneToMany(mappedBy = "assignedAgent")
-    private List<Ticket> assignedRickets;
+    private List<Ticket> assignedTickets;
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
@@ -47,7 +50,7 @@ public class User {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if(isActive==null){
+        if(isActive=null){
             isActive=true;
         }
     }

@@ -11,12 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)//don't include null fields in json
-
 //* Generic response wrapper for all API endpoints
-
-
 public class ApiResponse<T> {
-
     private Boolean success;
     /**
      * Message to send to client
@@ -30,6 +26,4 @@ public class ApiResponse<T> {
      * When response was generated
      */
     private String timestamp;
-
-
 }

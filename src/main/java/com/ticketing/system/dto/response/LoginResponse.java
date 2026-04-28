@@ -15,7 +15,6 @@ public class LoginResponse {
      * Header: Authorization: Bearer <token>
      */
     private String token;
-
     /**
      * User information
      */

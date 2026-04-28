@@ -2,9 +2,8 @@ package com.ticketing.system.entity;
 
 /**
  * RoleType Enum - Defines all possible roles in the system
- *
  * Using enum is safer than strings because:
- * - Type-safe: Can't accidentally create role "CUSTOMR" (typo)
+ * - Type-safe: Can't accidentally create role "CUSTOMER"(typo)
  * - Compile-time checking: If you use wrong role, won't compile
  * - Better for database integrity
  */

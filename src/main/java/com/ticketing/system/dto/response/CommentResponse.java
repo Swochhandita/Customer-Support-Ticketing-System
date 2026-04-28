@@ -12,26 +12,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentResponse {
-    /**
-     * Comment ID
-     */
     private Long id;
-
     /**
      * Comment message
      */
     private String message;
-
     /**
      * Who wrote the comment
      */
     private UserResponse user;
-
     /**
      * When written
      */
     private LocalDateTime createdAt;
-
     /**
      * When last edited
      */

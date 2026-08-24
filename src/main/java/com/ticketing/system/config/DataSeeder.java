@@ -23,7 +23,7 @@ public class DataSeeder implements CommandLineRunner {
 
     private void seedRole() {
     for(RoleType roleType : RoleType.values()){
-        boolean exists= roleRepository.findByName(roleType).isEmpty();
+        boolean exists= roleRepository.findByName(roleType).isPresent();
         if(!exists){
             Role role = Role.builder()
                     .name(roleType)

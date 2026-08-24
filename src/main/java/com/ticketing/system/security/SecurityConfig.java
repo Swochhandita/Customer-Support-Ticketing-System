@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity//enables preAuthorize annotations
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthFilter jwtAuthFilter;
 
     @Bean

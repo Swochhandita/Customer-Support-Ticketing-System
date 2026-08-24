@@ -1,5 +1,4 @@
 package com.ticketing.system.entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,11 +42,12 @@ public class User {
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if(isActive= null){
+        if(isActive== null){
             isActive=true;
         }
     }
@@ -55,6 +55,4 @@ public class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-
 }

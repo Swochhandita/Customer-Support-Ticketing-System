@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -14,16 +17,8 @@ import lombok.NoArgsConstructor;
 //* Generic response wrapper for all API endpoints
 public class ApiResponse<T> {
     private Boolean success;
-    /**
-     * Message to send to client
-     */
     private String message;
-    /**
-     * Actual response data (generic type T)
-     */
     private T data;
-    /**
-     * When response was generated
-     */
-    private String timestamp;
+    private HttpStatus httpStatus;
+    private LocalDateTime timestamp;
 }

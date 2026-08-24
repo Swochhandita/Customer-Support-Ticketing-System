@@ -70,4 +70,13 @@ public class ResponseUtil {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+
+    public static ApiResponse<Object> getUnauthorizedResponse(String message) {
+        return ApiResponse.builder()
+                .success(false)
+                .message(message)
+                .httpStatus(HttpStatus.UNAUTHORIZED)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 }

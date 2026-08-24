@@ -17,12 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {// system have email as an identifier so we use email as parameter but username for only spring security convention
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found with email "+email));
-        return org.springframework.security.core.userdetails.User
-                .builder()
-                .username(user.getEmail())//SpringSecurity stores the username, but we use email as identifier
-                .password(user.getPassword())
-                .authorities(List.of(new SimpleGrantedAuthority("Role_"+ user.getRole().getName().name())))
-                .build();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found with email " + email));
+        return new CustomUserDetails(user);
     }
 }

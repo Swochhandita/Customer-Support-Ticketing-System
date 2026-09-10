@@ -1,6 +1,6 @@
 package com.ticketing.system.security;
 
-import com.ticketing.system.utils.Constants;
+import com.ticketing.system.utils.ApiConstant;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,12 +25,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader(Constants.JWT_HEADER);
-        if(authHeader == null || !authHeader.startsWith(Constants.JWT_PREFIX)) {
+        final String authHeader = request.getHeader(ApiConstant.JWT_HEADER);
+        if(authHeader == null || !authHeader.startsWith(ApiConstant.JWT_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-        final String jwt = authHeader.substring(Constants.JWT_PREFIX.length());
+        final String jwt = authHeader.substring(ApiConstant.JWT_PREFIX.length());
         String email = null;
         try{
             email = jwtUtils.extractEmail(jwt);

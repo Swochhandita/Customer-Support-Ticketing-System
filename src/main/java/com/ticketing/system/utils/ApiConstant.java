@@ -4,7 +4,15 @@ package com.ticketing.system.utils;
  * Constants - All constant values used across the application
  * Centralizing constants makes them easy to change globally
  */
-public class Constants {
+public class ApiConstant {
+
+    // Path building blocks
+    public static final String API = "/api";
+    public static final String SLASH = "/";
+
+    // Resource segments
+    public static final String AUTH = "auth";
+
     // JWT Constants
     public static final String JWT_SECRET = "your-secret-key-change-this-in-production-at-least-32-characters-long";
     public static final long JWT_EXPIRATION = 86400000; // 24 hours in milliseconds
@@ -34,4 +42,8 @@ public class Constants {
     // Pagination Constants
     public static final int DEFAULT_PAGE_SIZE = 10;
     public static final int MAX_PAGE_SIZE = 10;
+
+    // Auth endpoints
+    public static final String REGISTER = "/register";
+    public static final String LOGIN = "/login";
 }

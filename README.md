@@ -177,7 +177,7 @@ Both endpoints:
 
 ## 🔜 Not Yet Implemented
 
-- Ticket CRUD (create, view, update status, assign to agent) — **next milestone**
+- Ticket CRUD (create, view, update status, assign to agent)
 - Comments on tickets
 - Email notifications on status change
 - WebSocket real-time updates

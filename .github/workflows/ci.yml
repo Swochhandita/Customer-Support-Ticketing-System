@@ -27,7 +27,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Build backend
-        run: ./mvnw clean package -DskipTests
+        run: bash mvnw clean package -DskipTests
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

@@ -1,6 +1,8 @@
 import Navbar from "./components/Navbar";
 import {useState} from "react";
 import TicketList from "./components/TicketList";
+import LoginForm from "./components/LoginForm";
+import Dashboard from "./components/Dashboard";
 
 function App() {
     const username = "Swochhandita Ghimire";
@@ -24,6 +26,7 @@ function App() {
                   </button>
               )
           }
+          <LoginForm/>
       </div>
   );
 }

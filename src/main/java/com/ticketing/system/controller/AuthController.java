@@ -10,12 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.AbstractController;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping(ApiConstant.AUTH)
+@RequestMapping(ApiConstant.API+ ApiConstant.SLASH+ApiConstant.AUTH)
 @RequiredArgsConstructor
 public class AuthController extends BaseController {
     private final AuthService authService;

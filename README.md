@@ -1,193 +1,407 @@
 # Customer Support Ticketing System
 
-A production-grade backend REST API for managing customer support tickets with real-time updates and email notifications.
+A full-stack customer support ticketing application built with **Spring Boot, React, MySQL, JWT authentication, Docker, and GitHub Actions**.
 
-## 🎯 Project Overview
+The project currently focuses on secure user authentication, registration, protected frontend routes, and the integration between a React frontend and Spring Boot REST API. The architecture is designed to be extended with ticket management, comments, notifications, and other support-system features.
 
-This is a Spring Boot application that provides a complete ticketing system where:
-- **Customers** can create support tickets and track their status
-- **Agents** can manage and resolve assigned tickets
-- **Admins** can oversee the entire system and view analytics
-- All updates happen in **real-time** via WebSocket
-- Email notifications are sent on **status changes**
+## Overview
 
-## 🛠️ Technology Stack
+The application consists of:
 
-| Technology | Purpose |
-|-----------|---------|
-| **Spring Boot 3.5.11** | Backend framework |
-| **Spring Data JPA** | Database ORM |
-| **Spring Security** | Authentication & Authorization |
-| **JWT (jjwt 0.12.3)** | Stateless authentication tokens |
-| **MySQL** | Relational database |
-| **WebSocket** | Real-time bidirectional communication |
-| **Spring Mail** | Email notifications |
-| **Lombok** | Reduce boilerplate code |
-| **springdoc-openapi / Swagger UI** | Interactive API documentation & testing |
-| **Docker** | Containerization (planned) |
+* **Spring Boot REST API** for backend services
+* **React** frontend for the user interface
+* **Spring Security + JWT** for stateless authentication
+* **MySQL** for data persistence
+* **Docker Compose** for running the frontend, backend, and database together
+* **GitHub Actions** for automated build verification
 
-## 📦 Project Structure
+## Technology Stack
 
-```
+| Technology         | Purpose                                   |
+| ------------------ | ----------------------------------------- |
+| Java 17            | Backend development                       |
+| Spring Boot 3.5.11 | REST API and application framework        |
+| Spring Data JPA    | Database access and ORM                   |
+| Spring Security    | Authentication and authorization          |
+| JWT (JJWT 0.12.3)  | Stateless authentication                  |
+| MySQL 8.0          | Relational database                       |
+| React              | Frontend application                      |
+| React Router       | Client-side routing and protected routes  |
+| Vite               | React development and build tooling       |
+| Nginx              | Production serving of the React build     |
+| Docker             | Application containerization              |
+| Docker Compose     | Multi-container application orchestration |
+| GitHub Actions     | Continuous integration                    |
+| Swagger / OpenAPI  | API documentation and testing             |
+| Lombok             | Boilerplate reduction                     |
+
+## Current Features
+
+### Authentication
+
+The backend provides authentication endpoints under `/api/auth`.
+
+* User registration
+* User login
+* Password hashing with BCrypt
+* JWT token generation
+* Stateless authentication
+* Input validation using Bean Validation
+* Centralized exception handling
+* Duplicate email/username validation
+* Role assignment during registration
+
+Newly registered users are assigned the `USER` role by default. Role assignment is not controlled by the client during registration.
+
+### React Frontend
+
+The frontend currently includes:
+
+* Login form
+* Registration form
+* Login and registration navigation
+* Backend API integration using `fetch`
+* JWT storage using browser `localStorage`
+* Protected dashboard route
+* Automatic redirection for unauthenticated users
+* Logout functionality
+* Display of authenticated user information
+* Client-side routing with React Router
+* Basic authentication error handling
+
+### Security
+
+The backend uses a stateless JWT-based security architecture.
+
+* Passwords are hashed using BCrypt.
+* JWT tokens are returned after successful authentication.
+* Protected requests require a valid Bearer token.
+* `JwtAuthFilter` validates incoming JWT tokens.
+* Spring Security manages authentication and authorization.
+* Public authentication and Swagger endpoints are explicitly permitted.
+* Other protected endpoints require authentication.
+
+## Project Structure
+
+```text
 customer-support-ticketing-system/
-├── src/main/
-│   ├── java/com/ticketing/system/
-│   │   ├── entity/
-│   │   │   ├── Role.java
-│   │   │   ├── RoleType.java
-│   │   │   ├── User.java
-│   │   │   ├── Ticket.java
-│   │   │   ├── TicketStatus.java
-│   │   │   ├── TicketPriority.java
-│   │   │   └── Comment.java
-│   │   │
-│   │   ├── dto/
-│   │   │   ├── request/
-│   │   │   │   ├── LoginRequest.java
-│   │   │   │   ├── RegisterRequest.java
-│   │   │   │   ├── CreateTicketRequest.java
-│   │   │   │   ├── UpdateTicketStatusRequest.java
-│   │   │   │   └── AddCommentRequest.java
-│   │   │   │
-│   │   │   └── response/
-│   │   │       ├── LoginResponse.java
-│   │   │       ├── UserResponse.java
-│   │   │       ├── TicketResponse.java
-│   │   │       ├── CommentResponse.java
-│   │   │       └── ApiResponse.java
-│   │   │
-│   │   ├── repository/
-│   │   │   ├── RoleRepository.java
-│   │   │   ├── UserRepository.java
-│   │   │   ├── TicketRepository.java
-│   │   │   └── CommentRepository.java
-│   │   │
-│   │   ├── service/
-│   │   │   ├── AuthService.java              # interface
-│   │   │   └── serviceImpl/
-│   │   │       └── AuthServiceImpl.java      # implementation
-│   │   │
-│   │   ├── mapper/
-│   │   │   └── UserMapper.java               # DTO <-> Entity conversion
-│   │   │
-│   │   ├── controller/
-│   │   │   ├── BaseController.java           # shared ResponseEntity helpers
-│   │   │   └── AuthController.java
-│   │   │
-│   │   ├── security/
-│   │   │   ├── JwtUtils.java
-│   │   │   ├── JwtAuthFilter.java
-│   │   │   ├── SecurityConfig.java
-│   │   │   ├── UserDetailsServiceImpl.java
-│   │   │   └── CustomUserDetails.java
-│   │   │
-│   │   ├── exception/
-│   │   │   ├── ResourceNotFoundException.java
-│   │   │   ├── DuplicateResourceException.java
-│   │   │   ├── BadRequestException.java
-│   │   │   └── GlobalExceptionHandler.java
-│   │   │
-│   │   ├── config/
-│   │   │   ├── DataSeeder.java                # seeds default roles on startup
-│   │   │   └── SwaggerConfig.java
-│   │   │
-│   │   ├── utils/
-│   │   │   ├── Constants.java
-│   │   │   ├── ApiConstant.java               # centralized URL path segments
-│   │   │   └── ResponseUtil.java              # ApiResponse builder helpers
-│   │   │
-│   │   └── CustomerSupportTicketingSystemApplication.java
-│   │
-│   └── resources/
-│       ├── application.properties
-│       └── application-dev.properties
 │
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── LoginForm.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   ├── RegisterForm.jsx
+│   │   │   └── TicketList.jsx
+│   │   ├── App.jsx
+│   │   └── ...
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   ├── package.json
+│   └── package-lock.json
+│
+├── src/
+│   └── main/
+│       ├── java/com/ticketing/system/
+│       │   ├── entity/
+│       │   │   ├── Role.java
+│       │   │   ├── RoleType.java
+│       │   │   ├── User.java
+│       │   │   ├── Ticket.java
+│       │   │   ├── TicketStatus.java
+│       │   │   ├── TicketPriority.java
+│       │   │   └── Comment.java
+│       │   │
+│       │   ├── dto/
+│       │   │   ├── request/
+│       │   │   │   ├── LoginRequest.java
+│       │   │   │   ├── RegisterRequest.java
+│       │   │   │   ├── CreateTicketRequest.java
+│       │   │   │   ├── UpdateTicketStatusRequest.java
+│       │   │   │   └── AddCommentRequest.java
+│       │   │   └── response/
+│       │   │       ├── LoginResponse.java
+│       │   │       ├── UserResponse.java
+│       │   │       ├── TicketResponse.java
+│       │   │       ├── CommentResponse.java
+│       │   │       └── ApiResponse.java
+│       │   │
+│       │   ├── repository/
+│       │   ├── service/
+│       │   ├── mapper/
+│       │   ├── controller/
+│       │   ├── security/
+│       │   ├── exception/
+│       │   ├── config/
+│       │   └── utils/
+│       │
+│       └── resources/
+│           ├── application.properties
+│           └── application-dev.properties
+│
+├── Dockerfile
+├── docker-compose.yml
 ├── pom.xml
+├── mvnw
+├── mvnw.cmd
 └── README.md
 ```
 
-## 🚀 Getting Started
+## Running the Application
+
+### Option 1: Run with Docker Compose
+
+Docker Compose is the recommended way to run the complete application.
 
 ### Prerequisites
-- Java 17+
-- Maven 3.8+
-- MySQL 8.0+
-- Docker & Docker Compose (optional, for containerization)
 
-### Installation
+* Docker Desktop
+* Git
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Swochhandita/customer-support-ticketing-system.git
-   cd customer-support-ticketing-system
-   ```
+Clone the repository:
 
-2. **Create MySQL database**
-   ```sql
-   mysql -u root -p
-   CREATE DATABASE ticket_system;
-   EXIT;
-   ```
-
-3. **Update configuration** — edit `src/main/resources/application-dev.properties`:
-   ```properties
-   spring.datasource.username=root
-   spring.datasource.password=your_password
-   ```
-
-4. **Build and run**
-   ```bash
-   mvn clean install
-   mvn spring-boot:run
-   ```
-   Application will start at `http://localhost:8080/api`
-
-5. **Default roles** (`ADMIN`, `USER`, `AGENT`) are seeded automatically on first startup.
-
-## 📖 API Documentation (Swagger)
-
-Interactive API docs are available once the app is running:
-
+```bash
+git clone https://github.com/Swochhandita/Customer-Support-Ticketing-System.git
+cd Customer-Support-Ticketing-System
 ```
+
+Start the application:
+
+```bash
+docker compose up --build
+```
+
+This starts three containers:
+
+```text
+React + Nginx
+      |
+      v
+Spring Boot API
+      |
+      v
+MySQL
+```
+
+The services are available at:
+
+| Service               | URL                                             |
+| --------------------- | ----------------------------------------------- |
+| React Frontend        | http://localhost:3000                           |
+| Spring Boot API       | http://localhost:8080                           |
+| Swagger UI            | http://localhost:8080/api/swagger-ui/index.html |
+| OpenAPI Specification | http://localhost:8080/api/v3/api-docs           |
+
+To stop the containers:
+
+```bash
+docker compose down
+```
+
+### Option 2: Run Backend and Frontend Separately
+
+#### Backend prerequisites
+
+* Java 17+
+* MySQL 8.0+
+* Maven
+
+Create the database:
+
+```sql
+CREATE DATABASE ticket_system;
+```
+
+Configure the database credentials in:
+
+```text
+src/main/resources/application-dev.properties
+```
+
+Then build the backend:
+
+```bash
+./mvnw clean package
+```
+
+On Windows:
+
+```powershell
+.\mvnw.cmd clean package
+```
+
+Run the application:
+
+```bash
+./mvnw spring-boot:run
+```
+
+On Windows:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+The backend runs on:
+
+```text
+http://localhost:8080
+```
+
+#### Frontend
+
+Navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The Vite development server normally runs on:
+
+```text
+http://localhost:5173
+```
+
+## API Documentation
+
+Swagger UI provides interactive API documentation and testing:
+
+```text
 http://localhost:8080/api/swagger-ui/index.html
 ```
 
-Raw OpenAPI spec:
-```
+OpenAPI specification:
+
+```text
 http://localhost:8080/api/v3/api-docs
 ```
 
-## ✅ Implemented Features
+### Authentication Endpoints
 
-### Authentication (`/api/auth`)
-- `POST /api/auth/register` — public registration. Every new account is assigned the `USER` role by default (role cannot be self-assigned, by design — see Security Notes below). Returns a JWT token immediately on success.
-- `POST /api/auth/login` — verifies credentials via Spring Security's `AuthenticationManager` and returns a JWT token.
+| Method | Endpoint             | Description                   |
+| ------ | -------------------- | ----------------------------- |
+| POST   | `/api/auth/register` | Register a new user           |
+| POST   | `/api/auth/login`    | Authenticate an existing user |
 
-Both endpoints:
-- Validate input via Bean Validation (`@Valid` + DTO constraints)
-- Return a consistent `ApiResponse<T>` envelope (`success`, `message`, `data`, `httpStatus`, `timestamp`)
-- Route all failures through a centralized `GlobalExceptionHandler` (`404` for missing resources, `409` for duplicate email/username, `401` for bad credentials, `400` for validation errors, `500` for anything unexpected)
+Example registration request:
 
-### Security Architecture
-- Stateless JWT authentication — no server-side sessions
-- Passwords hashed with BCrypt, never stored or logged in plain text
-- `JwtAuthFilter` validates the `Authorization: Bearer <token>` header on every request
-- `CustomUserDetails` wraps the `User` entity directly for Spring Security, exposing the account's active status (`isEnabled()`) and role-based authority (`ROLE_<name>`)
-- Public endpoints (`/auth/**`, Swagger UI, API docs) are explicitly permitted; everything else requires a valid token
+```json
+{
+  "username": "john",
+  "email": "john@example.com",
+  "password": "password123",
+  "firstName": "John",
+  "lastName": "Doe"
+}
+```
 
-## 🔜 Not Yet Implemented
+Example login request:
 
-- Ticket CRUD (create, view, update status, assign to agent)
-- Comments on tickets
-- Email notifications on status change
-- WebSocket real-time updates
-- Analytics endpoints
-- Automated tests
-- Docker/deployment setup
-- Admin-only role promotion endpoint
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
 
-## 📄 License
-This is a learning project for educational purposes.
+Successful authentication returns a JWT token that the frontend stores and uses to maintain the authenticated session.
 
-## 👤 Author
-Swochhandita
+## Continuous Integration
+
+The project uses **GitHub Actions** to automatically verify the application build whenever changes are pushed to the `dev` branch or a pull request targets `dev`.
+
+The CI workflow:
+
+1. Checks out the repository
+2. Sets up Java 17
+3. Builds the Spring Boot backend using Maven
+4. Sets up Node.js 24
+5. Installs frontend dependencies
+6. Builds the React frontend
+
+Workflow configuration:
+
+```text
+.github/workflows/ci.yml
+```
+
+This helps catch build-related issues before changes are merged or used for deployment.
+
+## Error Handling
+
+The backend uses centralized exception handling through `GlobalExceptionHandler`.
+
+The API provides consistent response structures containing information such as:
+
+* Success status
+* Message
+* Response data
+* HTTP status
+* Timestamp
+
+Common errors include:
+
+* Validation errors
+* Duplicate resources
+* Invalid credentials
+* Missing resources
+* Unexpected server errors
+
+## Current Scope
+
+The current implementation focuses primarily on authentication and the full-stack application setup.
+
+The following components are present in the backend architecture but are not yet exposed as complete ticket-management functionality:
+
+* Ticket creation and management
+* Ticket assignment
+* Ticket status updates
+* Ticket comments
+* Email notifications
+* WebSocket real-time updates
+* Analytics
+
+These are planned extensions of the project.
+
+## Future Improvements
+
+Potential future improvements include:
+
+* Complete ticket CRUD operations
+* Agent assignment and ticket workflows
+* Ticket comments and conversation history
+* Email notifications
+* WebSocket-based real-time updates
+* Role-specific dashboards
+* Automated unit and integration tests
+* Persistent Docker volumes and production configuration
+* Cloud deployment
+* Expanded CI/CD automation
+
+## License
+
+This project was developed as a learning and portfolio project.
+
+## Author
+
+**Swochhandita Ghimire**
+
+GitHub: `https://github.com/Swochhandita`

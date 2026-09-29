@@ -1,11 +1,18 @@
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 function LoginForm(){
     const [email, setEmail]= useState("");
     const [password, setPassword] = useState("");
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
    async function handleSubmit(event){
         event.preventDefault();
+        setError("");
         const response= await fetch("http://localhost:8080/api/auth/login",{
             method: "POST",
             headers: {
@@ -14,15 +21,20 @@ function LoginForm(){
             body: JSON.stringify({email, password})
         })
         const data = await response.json();
-        if (data.success){
+        if (data.success) {
             localStorage.setItem("token", data.data.token);
-            console.log("Login Success");
+            localStorage.setItem("user", JSON.stringify(data.data.user));
+            setLoggedIn(true);
+            navigate("/dashboard");
+        }else{
+            setError(data.message);
         }
     }
     return (
         <div>
             <h2>Login Form</h2>
             <form onSubmit={handleSubmit}>
+                {error && <p>{error}</p>}
                Email: <input
                     type="email"
                     placeholder="Email"
@@ -37,7 +49,11 @@ function LoginForm(){
                 <p> {email}</p>
                 <p> {password}</p>
                 <button>Login</button>
+                <p>Don't have an account? <Link to="/register">Register here</Link></p>
             </form>
+            {loggedIn && (
+                <p>Login Successful!</p>
+            )}
         </div>
     )
 }
